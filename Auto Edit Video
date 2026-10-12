@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b16">
+<title>Auto Edit Pro Studio</title>
+
+<style>
+:root {
+  --bg: #080b16;
+  --panel: #11172a;
+  --line: #293454;
+  --blue: #5795ff;
+  --purple: #a56bff;
+  --text: #f5f7ff;
+  --muted: #9ba8c7;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 10% 0%, #1a2850 0%, transparent 42%),
+    radial-gradient(ellipse at 90% 15%, #30164c 0%, transparent 36%),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, Arial, sans-serif;
+  min-height: 100vh;
+}
+button, input { font: inherit; }
+button { cursor: pointer; }
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 18px 5%;
+  border-bottom: 1px solid #ffffff15;
+  background: #080b16bb; position: sticky; top: 0; z-index: 5;
+  backdrop-filter: blur(16px);
+}
+.logo { font-weight: 900; letter-spacing: -.7px; font-size: 19px; }
+.logo span { color: #80aaff; }
+.status { color: #8df0c1; font-size: 12px; }
+main { width: min(1100px, 92%); margin: 35px auto 70px; }
+.hero { text-align: center; margin-bottom: 30px; }
+.tag {
+  display: inline-block; padding: 7px 12px; border-radius: 99px;
+  border: 1px solid #5795ff66; color: #b4ceff;
+  background: #5795ff12; font-size: 12px;
+}
+h1 { font-size: clamp(32px, 7vw, 57px); line-height: 1.05; margin: 17px 0 12px; }
+.gradient {
+  background: linear-gradient(90deg, #7eb3ff, #bd8cff);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p { color: var(--muted); line-height: 1.6; max-width: 570px; margin: auto; }
+.layout { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; }
+.panel {
+  background: linear-gradient(145deg, #151c31ed, #0e1323ed);
+  border: 1px solid var(--line); border-radius: 20px;
+  padding: 20px; min-width: 0;
+  box-shadow: 0 15px 45px #0002;
+}
+.panel h2 { font-size: 17px; margin: 0 0 17px; }
+.upload {
+  border: 1px dashed #5f7fbe; border-radius: 15px;
+  padding: 26px 12px; text-align: center; background: #5795ff08;
+}
+.upload .symbol { font-size: 32px; }
+.upload p { color: var(--muted); font-size: 13px; }
+.primary, .secondary {
+  border: 0; border-radius: 11px; padding: 12px 16px;
+  font-weight: 750; color: white; transition: .2s;
+}
+.primary {
+  background: linear-gradient(100deg, #397df4, #8952ed);
+  box-shadow: 0 5px 20px #684be344;
+}
+.secondary { background: #202b46; border: 1px solid #344365; }
+.primary:hover, .secondary:hover { transform: translateY(-2px); filter: brightness(1.15); }
+button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+#media { display: none; width: 100%; max-height: 340px; object-fit: contain; margin-top: 15px; border-radius: 12px; background: #05070d; }
+.file-info { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; margin-top: 10px; }
+.control { margin-top: 19px; }
+.control label { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 9px; }
+.control input[type=range] { width: 100%; accent-color: #7e8cff; }
+input[type=number] {
+  background: #090e1b; color: white; border: 1px solid var(--line);
+  border-radius: 8px; padding: 9px; width: 100%; min-width: 0;
+}
+.times { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.actions button { flex: 1; min-width: 120px; }
+.note { font-size: 12px; line-height: 1.6; color: var(--muted); }
+.preview-note { color: #b9c9eb; font-size: 12px; margin-top: 12px; }
+footer { text-align: center; padding: 22px; color: var(--muted); font-size: 12px; }
+@media(max-width: 720px) {
+  header { padding: 15px 4%; }
+  main { margin-top: 25px; }
+  .layout { grid-template-columns: 1fr; }
+  .panel { padding: 16px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">AUTO EDIT <span>PRO</span></div>
+  <div class="status">● Studio ready</div>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="tag">CREATIVE STUDIO • VERSION 1.0</span>
+    <h1>Your content.<br><span class="gradient">Your masterpiece.</span></h1>
+    <p>Preview videos, explore trim points, adjust photos, and prepare your next edit in one modern workspace.</p>
+  </section>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>01 / Import media</h2>
+      <div class="upload">
+        <div class="symbol">✦</div>
+        <strong>Choose a video or photo</strong>
+        <p>MP4, WebM, MOV or common image formats supported by your browser</p>
+        <input id="file" type="file" accept="video/*,image/*" hidden>
+        <button class="primary" onclick="document.getElementById('file').click()">＋ Choose file</button>
+      </div>
+      <video id="media" controls playsinline></video>
+      <div id="fileInfo" class="file-info">No media selected yet.</div>
+      <div class="preview-note">🔒 Preview processing happens in your browser.</div>
+
+      <div class="control">
+        <label for="start">Trim start (seconds)</label>
+        <input id="start" type="number" min="0" step="0.1" value="0">
+      </div>
+      <div class="control">
+        <label for="end">Trim end (seconds)</label>
+        <input id="end" type="number" min="0" step="0.1" value="0">
+      </div>
+      <div class="actions">
+        <button class="secondary" id="previewBtn">▶ Preview trim</button>
+        <button class="primary" id="exportBtn">Export clip</button>
+      </div>
+      <p class="note">Video trimming controls are a preview interface. Actual trimmed-video export requires a video-processing engine or backend.</p>
+    </section>
+
+    <section class="panel">
+      <h2>02 / Photo adjustments</h2>
+      <div class="control">
+        <label>Brightness <span id="brightVal">100%</span></label>
+        <input id="brightness" type="range" min="0" max="200" value="100">
+      </div>
+      <div class="control">
+        <label>Contrast <span id="contrastVal">100%</span></label>
+        <input id="contrast" type="range" min="0" max="200" value="100">
+      </div>
+      <div class="control">
+        <label>Saturation <span id="satVal">100%</span></label>
+        <input id="saturation" type="range" min="0" max="200" value="100">
+      </div>
+      <div class="actions">
+        <button class="secondary" id="resetBtn">Reset filters</button>
+        <button class="primary" id="photoExport">Download photo</button>
+      </div>
+      <p class="note">Select a photo to apply adjustments and download the result as a JPG. These filters also preview on video, but photo export works on images only.</p>
+      <canvas id="canvas" hidden></canvas>
+    </section>
+  </div>
+</main>
+
+<footer>Auto Edit Pro Studio · Built for creators · Version 1.0</footer>
+
+<script>
+const fileInput = document.getElementById('file');
+const media = document.getElementById('media');
+const info = document.getElementById('fileInfo');
+const startInput = document.getElementById('start');
+const endInput = document.getElementById('end');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+let currentURL = null;
+let currentType = '';
+let currentName = '';
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  if (currentURL) URL.revokeObjectURL(currentURL);
+  currentURL = URL.createObjectURL(file);
+  currentName = file.name;
+  currentType = file.type;
+
+  media.pause();
+  media.removeAttribute('src');
+  media.style.display = 'none';
+  media.onloadedmetadata = null;
+  media.onloadeddata = null;
+
+  if (file.type.startsWith('video/')) {
+    media.src = currentURL;
+    media.style.display = 'block';
+    media.onloadedmetadata = () => {
+      startInput.value = 0;
+      endInput.value = media.duration.toFixed(1);
+      info.textContent = `${file.name} · ${formatSize(file.size)} · ${media.duration.toFixed(1)} seconds`;
+      updateFilters();
+    };
+  } else if (file.type.startsWith('image/')) {
+    media.src = currentURL;
+    media.style.display = 'block';
+    media.onloadeddata = () => {
+      info.textContent = `${file.name} · ${formatSize(file.size)} · Photo`;
+      updateFilters();
+    };
+    startInput.value = 0;
+    endInput.value = 0;
+  } else {
+    info.textContent = 'This file type is not supported by the preview.';
+  }
+});
+
+function formatSize(bytes) {
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function updateFilters() {
+  const b = document.getElementById('brightness').value;
+  const c = document.getElementById('contrast').value;
+  const s = document.getElementById('saturation').value;
+
+  document.getElementById('brightVal').textContent = b + '%';
+  document.getElementById('contrastVal').textContent = c + '%';
+  document.getElementById('satVal').textContent = s + '%';
+  media.style.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+}
+
+['brightness','contrast','saturation'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateFilters);
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.getElementById('brightness').value = 100;
+  document.getElementById('contrast').value = 100;
+  document.getElementById('saturation').value = 100;
+  updateFilters();
+});
+
+document.getElementById('previewBtn').addEventListener('click', () => {
+  if (!currentType.startsWith('video/')) {
+    alert('Upload a video first to preview a trim range.');
+    return;
+  }
+  const a = Number(startInput.value);
+  const b = Number(endInput.value);
+  if (a < 0 || b <= a || b > media.duration) {
+    alert('Choose a valid start and end time within the video duration.');
+    return;
+  }
+  media.currentTime = a;
+  media.play();
+  media.ontimeupdate = () => {
+    if (media.currentTime >= b) {
+      media.pause();
+      media.ontimeupdate = null;
+    }
+  };
+});
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  if (!currentType.startsWith('video/')) {
+    alert('Upload a video before preparing a clip.');
+    return;
+  }
+  alert('Your trim points are ready. To export a real trimmed video, this site needs an FFmpeg processing engine or a video-processing backend. GitHub Pages hosts static files and cannot process video on its own.');
+});
+
+document.getElementById('photoExport').addEventListener('click', () => {
+  if (!currentType.startsWith('image/')) {
+    alert('Upload a photo first. Photo export works with images.');
+    return;
+  }
+
+  const image = new Image();
+  image.onload = () => {
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    ctx.filter = media.style.filter || 'none';
+    ctx.drawImage(image, 0, 0);
+    ctx.filter = 'none';
+
+    canvas.toBlob(blob => {
+      if (!blob) {
+        alert('Could not export this image. Try another photo.');
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = currentName.replace(/\.[^.]+$/, '') + '-edited.jpg';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, 'image/jpeg', 0.94);
+  };
+  image.onerror = () => alert('Could not read this photo. Please try another file.');
+  image.src = currentURL;
+});
+</script>
+</body>
+</html>
